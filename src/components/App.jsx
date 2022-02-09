@@ -6,11 +6,11 @@ import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 
 function App() {
   const [init, setInit] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(null);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      setIsLoggedIn(user);
+    onAuthStateChanged(auth, (u) => {
+      setUser(u);
       setInit(true);
     });
   }, []);
@@ -19,7 +19,7 @@ function App() {
     <>
       <header></header>
       <main>
-        {init ? <AppRouter isLoggedIn={isLoggedIn} /> : <p>Wait...</p>}
+        {init ? <AppRouter isLoggedIn={user} /> : <p>Wait...</p>}
       </main>
 
       <footer>

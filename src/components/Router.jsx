@@ -6,7 +6,7 @@ import EditProfile from "routes/EditProfile";
 import Profile from "routes/Profile";
 import { useState } from "react";
 
-const AppRouter = ({isLoggedIn}) => {
+const AppRouter = ({ isLoggedIn }) => {
   return (
     <Router>
       <Routes>
@@ -21,7 +21,5 @@ const AppRouter = ({isLoggedIn}) => {
     </Router>
   );
 };
-
-
 
 export default AppRouter;
