@@ -3,8 +3,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   GoogleAuthProvider,
-  signInWithRedirect,
-  getRedirectResult
+  signInWithPopup,
 } from "firebase/auth";
 import { auth } from "firebaseApp";
 
@@ -30,16 +29,12 @@ const Auth = () => {
   };
 
   const onSocialClick = async (e) => {
-    const {
-      target: { name },
-    } = e;
+    e.preventDefault();
 
-    const provider = name === `google` ? new GoogleAuthProvider() : null;
-
-    await signInWithRedirect(auth, provider);
-    getRedirectResult(auth).then((result) => {
-      
-    })
+    const name = e.target.name;
+    const provider =
+      name === `google` ? new GoogleAuthProvider() : new GoogleAuthProvider();
+    const res = await signInWithPopup(auth, provider);
   };
 
   return (
@@ -63,7 +58,9 @@ const Auth = () => {
         />
         <button onClick={onSignClick("IN")}>Sign In</button>
         <button onClick={onSignClick("UP")}>Sign Up</button>
-        <button name="google">Sign In with Google</button>
+        <button name="google" onClick={onSocialClick}>
+          Sign In with Google
+        </button>
         <button name="twitter">Sign In with Twitter</button>
         <button name="github">Sign In with GitHub</button>
       </form>

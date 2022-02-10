@@ -19,22 +19,10 @@ function App() {
     <>
       <header></header>
       <main>
-        {init ? <AppRouter isLoggedIn={user} /> : <p>Wait...</p>}
+        {init ? <AppRouter user={user} /> : <p>Wait...</p>}
       </main>
 
       <footer>
-        {auth.currentUser ? (
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              signOut(auth);
-            }}
-          >
-            Sign Out
-          </button>
-        ) : (
-          <></>
-        )}
       </footer>
     </>
   );
