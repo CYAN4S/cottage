@@ -1,5 +1,6 @@
 import { doc, deleteDoc, updateDoc } from "firebase/firestore";
-import { firestore } from "firebaseApp";
+import { deleteObject, ref } from "firebase/storage";
+import { firestore, storage } from "firebaseApp";
 import { useState } from "react";
 
 export default function Post({ postDoc, isOwner }) {
@@ -9,12 +10,19 @@ export default function Post({ postDoc, isOwner }) {
   return (
     <div>
       <h4>{postDoc.content}</h4>
+      {postDoc.attachmentUrl && (
+        <img src={postDoc.attachmentUrl} width="50px" height="50px" />
+      )}
       {isOwner && (
         <>
           <button
             onClick={async () => {
               const ok = window.confirm("정말로 삭제하시겠습니까?");
-              ok && (await deleteDoc(doc(firestore, "posts", postDoc.id)));
+              if (ok) {
+                await deleteDoc(doc(firestore, "posts", postDoc.id));
+                postDoc.attachmentUrl &&
+                  (await deleteObject(ref(storage, postDoc.attachmentUrl)));
+              }
             }}
           >
             Delete
@@ -31,11 +39,11 @@ export default function Post({ postDoc, isOwner }) {
             <>
               <form
                 onSubmit={async (e) => {
-                    e.preventDefault()
+                  e.preventDefault();
                   await updateDoc(doc(firestore, "posts", postDoc.id), {
                     content: newContent,
                   });
-                  setEditing(false)
+                  setEditing(false);
                 }}
               >
                 <input
