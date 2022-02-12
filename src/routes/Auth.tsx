@@ -5,15 +5,15 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
-import { auth } from "firebaseApp";
+import { auth } from "../firebaseApp";
 
 const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
 
-  const onSignClick = (action) => {
-    return async (e) => {
+  const onSignClick = (action: string) => {
+    return async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       e.preventDefault();
       try {
         const credentials =
@@ -21,17 +21,19 @@ const Auth = () => {
             ? await createUserWithEmailAndPassword(auth, email, password)
             : await signInWithEmailAndPassword(auth, email, password);
         console.log(credentials);
-      } catch (error) {
+      } catch (error: any) {
         setError(error.message);
         console.log(error);
       }
     };
   };
 
-  const onSocialClick = async (e) => {
+  const onSocialClick = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     e.preventDefault();
 
-    const name = e.target.name;
+    const name = `google`;
     const provider =
       name === `google` ? new GoogleAuthProvider() : new GoogleAuthProvider();
     const res = await signInWithPopup(auth, provider);
@@ -42,16 +44,12 @@ const Auth = () => {
       <form>
         <input
           type="email"
-          name="email"
-          id="email"
           placeholder="E-mail"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
         <input
           type="password"
-          name="password"
-          id="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}

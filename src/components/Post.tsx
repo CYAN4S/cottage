@@ -1,9 +1,10 @@
 import { doc, deleteDoc, updateDoc } from "firebase/firestore";
 import { deleteObject, ref } from "firebase/storage";
-import { firestore, storage } from "firebaseApp";
+import { firestore, storage } from "../firebaseApp";
+import React from "react";
 import { useState } from "react";
 
-export default function Post({ postDoc, isOwner }) {
+export default function Post({ postDoc, isOwner }: any) {
   const [editing, setEditing] = useState(false);
   const [newContent, setNewContent] = useState(postDoc.content);
 

@@ -1,17 +1,20 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useState, useEffect } from "react";
-import { firestore, storage } from "firebaseApp";
+import { firestore, storage } from "../firebaseApp";
 import { collection, addDoc, getDocs, onSnapshot } from "firebase/firestore";
 import { ref, uploadString, getDownloadURL } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
-import Post from "components/Post";
+import Post from "../components/Post";
+import { FirebaseContext } from "../App";
 
-export default function Home({ user }) {
+export default function Home() {
   const [content, setContent] = useState("");
-  const [posts, setPosts] = useState([]);
-  const [attachment, setAttachment] = useState();
+  const [posts, setPosts] = useState<any[]>([]);
+  const [attachment, setAttachment] = useState("");
 
-  const onSubmit = async (e) => {
+  const user = useContext(FirebaseContext);
+
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     let attachmentUrl = null;
@@ -30,7 +33,7 @@ export default function Home({ user }) {
     });
 
     setContent("");
-    setAttachment(null);
+    setAttachment("");
   };
 
   const getContents = async () => {
@@ -41,13 +44,13 @@ export default function Home({ user }) {
     });
   };
 
-  const onFileChange = (e) => {
-    const file = e.target.files[0];
+  const onFileChange = (e: any) => {
+    const file = e.target.files?.[0];
     const reader = new FileReader();
-    reader.onloadend = (e) => {
-      setAttachment(e.currentTarget.result);
+    reader.onloadend = (e: any) => {
+      setAttachment(e.currentTarget?.result);
     };
-    reader.readAsDataURL(file);
+    reader.readAsDataURL(file!);
   };
 
   useEffect(() => {
@@ -83,7 +86,7 @@ export default function Home({ user }) {
         {attachment && (
           <div>
             <img src={attachment} width="50px" height="50px" />
-            <button onClick={() => setAttachment(null)}>Clear</button>
+            <button onClick={() => setAttachment("")}>Clear</button>
           </div>
         )}
       </form>
