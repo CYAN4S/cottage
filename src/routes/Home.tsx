@@ -12,7 +12,7 @@ export default function Home() {
   const [posts, setPosts] = useState<any[]>([]);
   const [attachment, setAttachment] = useState("");
 
-  const user = useContext(FirebaseContext);
+  const context = useContext(FirebaseContext);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -20,7 +20,7 @@ export default function Home() {
     let attachmentUrl = null;
 
     if (attachment) {
-      const storageRef = ref(storage, `${user.uid}/${uuidv4()}`);
+      const storageRef = ref(storage, `${context?.uid}/${uuidv4()}`);
       const response = await uploadString(storageRef, attachment, "data_url");
       attachmentUrl = await getDownloadURL(response.ref);
     }
@@ -28,7 +28,7 @@ export default function Home() {
     await addDoc(collection(firestore, "posts"), {
       content,
       createdAt: Date.now(),
-      creatorId: user.uid,
+      creatorId: context?.uid,
       attachmentUrl,
     });
 
@@ -39,7 +39,6 @@ export default function Home() {
   const getContents = async () => {
     const docs = await getDocs(collection(firestore, "posts"));
     docs.forEach((doc) => {
-      console.log(doc.data().content);
       setPosts((prev) => [{ ...doc.data(), id: doc.id }, ...prev]);
     });
   };
@@ -54,7 +53,7 @@ export default function Home() {
   };
 
   useEffect(() => {
-    getContents();
+    // getContents();
     const unsub = onSnapshot(collection(firestore, "posts"), (snapshot) => {
       setPosts(
         snapshot.docs.map((doc) => ({
@@ -70,7 +69,7 @@ export default function Home() {
     <div>
       <div>
         {posts.map((c) => (
-          <Post key={c.id} postDoc={c} isOwner={c.creatorId === user.uid} />
+          <Post key={c.id} postDoc={c} isOwner={c.creatorId === context?.uid} />
         ))}
       </div>
       <form onSubmit={onSubmit}>

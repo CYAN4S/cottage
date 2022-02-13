@@ -15,11 +15,6 @@ export default function useProfile() {
     });
   }, []);
 
-  useEffect(() => {
-    console.log(`${displayName} changed.`);
-  }, [displayName])
-  
-
   const setNewProfile = async (newDisplayName: string | null) => {
     const user = auth.currentUser!
     await updateProfile(user, { displayName: newDisplayName })

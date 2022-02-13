@@ -4,29 +4,36 @@ import "./App.css";
 import AppRouter from "./Router";
 import { firebaseApp, auth } from "./firebaseApp";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import useProfile from "./Store";
 
-type FirebaseContextType = {
-  uid?: string;
-  displayName?: string;
-}
+type ContextType = {
+  uid: string | null;
+  displayName: string | null;
+  setNewProfile: (newDisplayName: string | null) => Promise<void>;
+} | null;
 
-export const FirebaseContext = React.createContext<FirebaseContextType>({});
+export const FirebaseContext = React.createContext<ContextType>(null);
 
 function App() {
   const [init, setInit] = useState(false);
-  const [context, setContext] = useState({})
+  const [context, setContext] = useState<ContextType>(null);
+
+  const { displayName, uid, setNewProfile } = useProfile();
 
   useEffect(() => {
     onAuthStateChanged(auth, (u) => {
-      if (u) {
-        setContext({
-          uid: u.uid,
-          displayName: u.displayName
-        })
-      }
+      if (u)
+        setContext({ uid: u.uid, displayName: u.displayName, setNewProfile });
+      else 
+        setContext(null);
+        
       setInit(true);
     });
   }, []);
+
+  useEffect(() => {
+    setContext({ uid, displayName, setNewProfile });
+  }, [displayName, uid]);
 
   return (
     <FirebaseContext.Provider value={context}>

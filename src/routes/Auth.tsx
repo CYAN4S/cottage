@@ -20,10 +20,8 @@ const Auth = () => {
           action === "UP"
             ? await createUserWithEmailAndPassword(auth, email, password)
             : await signInWithEmailAndPassword(auth, email, password);
-        console.log(credentials);
       } catch (error: any) {
         setError(error.message);
-        console.log(error);
       }
     };
   };
@@ -44,22 +42,22 @@ const Auth = () => {
       <form>
         <input
           type="email"
-          placeholder="E-mail"
+          placeholder="이메일"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
         <input
           type="password"
-          placeholder="Password"
+          placeholder="비밀번호"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
         <button onClick={onSignClick("IN")}>Sign In</button>
         <button onClick={onSignClick("UP")}>Sign Up</button>
-        <button name="google" onClick={onSocialClick("google")}>
-          Sign In with Google
-        </button>
+
+        <button onClick={onSocialClick("google")}>Sign In with Google</button>
       </form>
+
       <p>{error}</p>
     </div>
   );

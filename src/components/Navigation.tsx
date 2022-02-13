@@ -4,13 +4,7 @@ import { FirebaseContext } from "../App";
 import useProfile from "../Store";
 
 export default function Navigation() {
-  const { displayName } = useProfile();
-
-  useEffect(() => {
-    console.log("cd");
-    
-  }, [displayName])
-  
+  const { displayName } = useContext(FirebaseContext)!;
 
   return (
     <nav>

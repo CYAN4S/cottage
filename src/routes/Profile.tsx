@@ -9,9 +9,8 @@ import useProfile from "../Store"
 
 export default function Profile() {
   const navigate = useNavigate();
-  const { displayName, uid, setNewProfile } = useProfile();
+  const { displayName, uid, setNewProfile } = useContext(FirebaseContext)!;
 
-  const user = useContext(FirebaseContext);
   const [newDisplayName, setNewDisplayName] = useState(displayName);
 
   const getMyPosts = async () => {
@@ -19,7 +18,7 @@ export default function Profile() {
 
     const q = query(
       postsRef,
-      where("creatorId", "==", `${user.uid}`),
+      where("creatorId", "==", `${uid}`),
       orderBy("createdAt", "desc")
     );
 
@@ -39,8 +38,7 @@ export default function Profile() {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (user.displayName !== newDisplayName) {
-      // await updateProfile(auth.currentUser!, { displayName: newDisplayName });
+    if (displayName !== newDisplayName) {
       await setNewProfile(newDisplayName);
     }
   };
@@ -55,7 +53,7 @@ export default function Profile() {
         <input
           type="text"
           placeholder="Display name"
-          value={newDisplayName!}
+          value={newDisplayName ? newDisplayName : ""}
           onChange={(e) => {
             setNewDisplayName(e.target.value);
           }}
