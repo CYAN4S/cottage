@@ -12,7 +12,7 @@ const Auth = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
 
-  const onSignClick = (action: string) => {
+  const onSignClick = (action: "UP" | "IN") => {
     return async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       e.preventDefault();
       try {
@@ -28,16 +28,16 @@ const Auth = () => {
     };
   };
 
-  const onSocialClick = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    e.preventDefault();
-
-    const name = `google`;
-    const provider =
-      name === `google` ? new GoogleAuthProvider() : new GoogleAuthProvider();
-    const res = await signInWithPopup(auth, provider);
-  };
+  const onSocialClick =
+    (provider: "google" | "github") =>
+    async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      e.preventDefault();
+      const authProvider =
+        provider === `google`
+          ? new GoogleAuthProvider()
+          : new GoogleAuthProvider();
+      const res = await signInWithPopup(auth, authProvider);
+    };
 
   return (
     <div>
@@ -56,11 +56,9 @@ const Auth = () => {
         />
         <button onClick={onSignClick("IN")}>Sign In</button>
         <button onClick={onSignClick("UP")}>Sign Up</button>
-        <button name="google" onClick={onSocialClick}>
+        <button name="google" onClick={onSocialClick("google")}>
           Sign In with Google
         </button>
-        <button name="twitter">Sign In with Twitter</button>
-        <button name="github">Sign In with GitHub</button>
       </form>
       <p>{error}</p>
     </div>

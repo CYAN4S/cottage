@@ -1,9 +1,16 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FirebaseContext } from "../App";
+import useProfile from "../Store";
 
 export default function Navigation() {
-  const user = useContext(FirebaseContext);
+  const { displayName } = useProfile();
+
+  useEffect(() => {
+    console.log("cd");
+    
+  }, [displayName])
+  
 
   return (
     <nav>
@@ -12,7 +19,7 @@ export default function Navigation() {
           <Link to="/">Home</Link>
         </li>
         <li>
-          <Link to="/profile">{user.displayName}의 프로필</Link>
+          <Link to="/profile">{displayName}의 프로필</Link>
         </li>
       </ul>
     </nav>

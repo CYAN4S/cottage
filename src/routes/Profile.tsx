@@ -1,16 +1,18 @@
 import React, { useContext } from "react";
 import { auth, firestore } from "../firebaseApp";
-import { signOut, updateProfile } from "firebase/auth";
+import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
 import { FirebaseContext } from "../App";
+import useProfile from "../Store"
 
 export default function Profile() {
   const navigate = useNavigate();
+  const { displayName, uid, setNewProfile } = useProfile();
 
   const user = useContext(FirebaseContext);
-  const [newDisplayName, setNewDisplayName] = useState(user.displayName);
+  const [newDisplayName, setNewDisplayName] = useState(displayName);
 
   const getMyPosts = async () => {
     const postsRef = collection(firestore, "posts");
@@ -23,7 +25,7 @@ export default function Profile() {
 
     const snapshot = await getDocs(q);
     snapshot.forEach((x) => {
-      console.log(x.data());
+      // TODO
     });
   };
 
@@ -38,7 +40,8 @@ export default function Profile() {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (user.displayName !== newDisplayName) {
-      await updateProfile(auth.currentUser!, { displayName: newDisplayName });
+      // await updateProfile(auth.currentUser!, { displayName: newDisplayName });
+      await setNewProfile(newDisplayName);
     }
   };
 
@@ -52,7 +55,7 @@ export default function Profile() {
         <input
           type="text"
           placeholder="Display name"
-          value={newDisplayName}
+          value={newDisplayName!}
           onChange={(e) => {
             setNewDisplayName(e.target.value);
           }}
