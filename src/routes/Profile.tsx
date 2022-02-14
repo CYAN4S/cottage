@@ -10,7 +10,6 @@ import useProfile from "../Store"
 export default function Profile() {
   const navigate = useNavigate();
   const { displayName, uid, setNewProfile } = useContext(FirebaseContext)!;
-
   const [newDisplayName, setNewDisplayName] = useState(displayName);
 
   const getMyPosts = async () => {

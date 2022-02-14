@@ -18,17 +18,17 @@ function App() {
   const [init, setInit] = useState(false);
   const [context, setContext] = useState<ContextType>(null);
 
-  const { displayName, uid, setNewProfile } = useProfile();
+  const { displayName, uid, setNewProfile } = useProfile(auth);
 
   useEffect(() => {
-    onAuthStateChanged(auth, (u) => {
-      if (u)
-        setContext({ uid: u.uid, displayName: u.displayName, setNewProfile });
-      else 
-        setContext(null);
-        
+    const unsub = onAuthStateChanged(auth, (u) => {
+      if (u) setContext({ ...u, setNewProfile });
+      else setContext(null);
+
       setInit(true);
     });
+
+    return () => unsub();
   }, []);
 
   useEffect(() => {
