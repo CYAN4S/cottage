@@ -1,0 +1,23 @@
+.wrapper {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+.main {
+  flex: 1 0 auto;
+}
+
+.header {
+    display: flex;
+    height: 60px;
+    padding: 16px;
+    box-sizing: border-box;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #26bfb3;
+}
+
+.nav {
+  display: flex;
+}

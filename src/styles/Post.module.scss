@@ -1,0 +1,29 @@
+.post {
+    border-bottom-width: 1px;
+    border-color: rgb(207, 207, 207);
+    margin: 16px;
+    padding: 16px 0;
+    border-style: none none solid none;
+}
+
+.content {
+    font-size: 16px;
+}
+
+.date {
+    font-size: 14px;
+    color: gray;
+}
+
+.imageContainer {
+    width: 100%;
+    max-height: 700px;
+    overflow: hidden;
+}
+
+.image {
+    position: relative;
+    top: 0px;
+    width: 100%;
+    min-height: 100%;
+}

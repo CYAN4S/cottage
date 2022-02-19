@@ -1,45 +1,39 @@
-import React, { useContext } from "react";
 import { useState, useEffect } from "react";
-import { firestore, storage } from "../firebaseApp";
-import { collection, addDoc, getDocs, onSnapshot } from "firebase/firestore";
-import { ref, uploadString, getDownloadURL } from "firebase/storage";
+import { firestore } from "../firebaseApp";
+import { collection, onSnapshot } from "firebase/firestore";
 
-import Post from "../components/Post";
-import { FirebaseContext } from "../App";
 import Editor from "../components/Editor";
 import Timeline from "../components/Timeline";
 
-export default function Home() {
+import styles from "../styles/Home.module.scss"
 
+type PostData = {
+  id: string,
+  createdAt: number,
+  attachmentUrl: string | null
+  creatorId: string,
+  content: string
+}
+
+export default function Home() {
   const [posts, setPosts] = useState<any[]>([]);
 
-  const context = useContext(FirebaseContext);
-
-
-  // const getContents = async () => {
-  //   const docs = await getDocs(collection(firestore, "posts"));
-  //   docs.forEach((doc) => {
-  //     setPosts((prev) => [{ ...doc.data(), id: doc.id }, ...prev]);
-  //   });
-  // };
-
   useEffect(() => {
-    // getContents();
     const unsub = onSnapshot(collection(firestore, "posts"), (snapshot) => {
       setPosts(
         snapshot.docs.map((doc) => ({
           id: doc.id,
-          ...doc.data(),
-        }))
+          ...doc.data()
+        })).sort((a: any, b: any) => - a.createdAt + b.createdAt)
       );
     });
     return () => unsub();
   }, []);
 
   return (
-    <div>
-      <Timeline posts={posts}/>
+    <div className={styles.home}>
       <Editor />
+      <Timeline posts={posts}/>
     </div>
   );
 }

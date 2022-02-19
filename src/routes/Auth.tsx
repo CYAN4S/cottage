@@ -3,6 +3,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   GoogleAuthProvider,
+  GithubAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
 import { auth } from "../firebaseApp";
@@ -11,19 +12,19 @@ const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const [isSignIn, setIsSignIn] = useState(true);
 
-  const onSignClick = (action: "UP" | "IN") => {
-    return async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-      e.preventDefault();
-      try {
-        const credentials =
-          action === "UP"
-            ? await createUserWithEmailAndPassword(auth, email, password)
-            : await signInWithEmailAndPassword(auth, email, password);
-      } catch (error: any) {
-        setError(error.message);
-      }
-    };
+  const onSignClick = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.preventDefault();
+    try {
+      isSignIn
+        ? await signInWithEmailAndPassword(auth, email, password)
+        : await createUserWithEmailAndPassword(auth, email, password);
+    } catch (error: any) {
+      setError(error.message);
+    }
   };
 
   const onSocialClick =
@@ -33,30 +34,46 @@ const Auth = () => {
       const authProvider =
         provider === `google`
           ? new GoogleAuthProvider()
-          : new GoogleAuthProvider();
-      const res = await signInWithPopup(auth, authProvider);
+          : new GithubAuthProvider();
+
+      await signInWithPopup(auth, authProvider);
     };
 
   return (
     <div>
+      <h1>{isSignIn ? "코티지에 로그인" : "코티지에 가입"}</h1>
       <form>
+        <label htmlFor="email">이메일</label>
         <input
+          id="email"
+          name="email"
           type="email"
           placeholder="이메일"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
+        <label htmlFor="password">비밀번호</label>
         <input
+          id="password"
+          name="password"
           type="password"
           placeholder="비밀번호"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button onClick={onSignClick("IN")}>Sign In</button>
-        <button onClick={onSignClick("UP")}>Sign Up</button>
-
-        <button onClick={onSocialClick("google")}>Sign In with Google</button>
+        <button onClick={onSignClick}>Sign In</button>
+        <button onClick={onSignClick}>Sign Up</button>
+        <p>또는</p>
+        <button onClick={onSocialClick("google")}>Google 계정으로 로그인</button>
+        <button onClick={onSocialClick("google")}>GitHub 계정으로 로그인</button>
       </form>
+
+      <p>
+        {isSignIn ? "계정이 없으신가요? " : "이미 회원이신가요? "}
+        <a onClick={() => setIsSignIn((p) => !p)}>
+          {isSignIn ? "가입하기" : "로그인하기"}
+        </a>
+      </p>
 
       <p>{error}</p>
     </div>

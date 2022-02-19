@@ -3,38 +3,39 @@ import { deleteObject, ref } from "firebase/storage";
 import { firestore, storage } from "../firebaseApp";
 import React from "react";
 import { useState } from "react";
+import styles from "../styles/Post.module.scss";
 
 export default function Post({ postDoc, isOwner }: any) {
   const [editing, setEditing] = useState(false);
   const [newContent, setNewContent] = useState(postDoc.content);
 
+  const onDeleteClick = async () => {
+    const ok = window.confirm("정말로 삭제하시겠습니까?");
+    if (ok) {
+      await deleteDoc(doc(firestore, "posts", postDoc.id));
+      postDoc.attachmentUrl &&
+        (await deleteObject(ref(storage, postDoc.attachmentUrl)));
+    }
+  };
+
   return (
-    <div>
-      <h4>{postDoc.content}</h4>
+    <div className={styles.post}>
+      <p className={styles.content}>{postDoc.content}</p>
       {postDoc.attachmentUrl && (
-        <img src={postDoc.attachmentUrl} width="50px" height="50px" />
+        <div className={styles.imageContainer}>
+          <img src={postDoc.attachmentUrl} className={styles.image} />
+        </div>
       )}
+      <p className={styles.date}>{new Date(postDoc.createdAt).toLocaleString('ko-KR', { timeZone: 'UTC' })}</p>
+
+      <div className={styles.postProfile}>
+        
+      </div>
+
       {isOwner && (
         <>
-          <button
-            onClick={async () => {
-              const ok = window.confirm("정말로 삭제하시겠습니까?");
-              if (ok) {
-                await deleteDoc(doc(firestore, "posts", postDoc.id));
-                postDoc.attachmentUrl &&
-                  (await deleteObject(ref(storage, postDoc.attachmentUrl)));
-              }
-            }}
-          >
-            Delete
-          </button>
-          <button
-            onClick={() => {
-              setEditing((prev) => !prev);
-            }}
-          >
-            Edit
-          </button>
+          <button onClick={onDeleteClick}>Delete</button>
+          <button onClick={() => setEditing((p) => !p)}>Edit</button>
 
           {editing ? (
             <>

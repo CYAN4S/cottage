@@ -11,22 +11,33 @@ import Profile from "./routes/Profile";
 import { useState } from "react";
 import Navigation from "./components/Navigation";
 import { FirebaseContext } from "./App";
+import styles from "./styles/Router.module.scss";
 
 const AppRouter = () => {
   const context = useContext(FirebaseContext);
 
   return (
-    <Router>
-      {context && <Navigation />}
-      <Routes>
-        <Route path="/" element={context ? <Home /> : <Auth />} />
-        <Route
-          path="/profile"
-          element={context ? <Profile /> : <Navigate replace to="/" />}
-        />
-        <Route path="*" element={<Navigate replace to="/" />} />
-      </Routes>
-    </Router>
+    <>
+      <Router>
+        <div className={styles.wrapper}>
+          <header className={styles.header}>
+            <div>cottage</div>
+            {context && <Navigation />}
+          </header>
+          <main className={styles.main}>
+            <Routes>
+              <Route path="/" element={context ? <Home /> : <Auth />} />
+              <Route
+                path="/profile"
+                element={context ? <Profile /> : <Navigate replace to="/" />}
+              />
+              <Route path="*" element={<Navigate replace to="/" />} />
+            </Routes>
+          </main>
+          <footer>Copyright 2022 CYAN4S. All rights reserved.</footer>
+        </div>
+      </Router>
+    </>
   );
 };
 
