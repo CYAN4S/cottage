@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
 import { FirebaseContext } from "../App";
-import useProfile from "../Store";
 import Timeline from "../components/Timeline";
 
 export default function Profile() {
@@ -32,10 +31,6 @@ export default function Profile() {
         ...doc.data(),
       }))
     );
-
-    snapshot.forEach((x) => {
-      // TODO
-    });
   };
 
   const onSignOutClick = (

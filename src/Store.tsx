@@ -1,5 +1,5 @@
 import { Auth, onAuthStateChanged, updateProfile } from "firebase/auth";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function useProfile(auth: Auth) {
   // Properties from UserInfo interface

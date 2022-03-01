@@ -8,7 +8,6 @@ import {
 import Auth from "./routes/Auth";
 import Home from "./routes/Home";
 import Profile from "./routes/Profile";
-import { useState } from "react";
 import Navigation from "./components/Navigation";
 import { FirebaseContext } from "./App";
 import styles from "./styles/Router.module.scss";

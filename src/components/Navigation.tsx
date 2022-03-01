@@ -1,7 +1,6 @@
-import React, { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { FirebaseContext } from "../App";
-import useProfile from "../Store";
 
 import styles from "../styles/Router.module.scss";
 

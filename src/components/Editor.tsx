@@ -71,7 +71,7 @@ export default function Editor() {
       />
       {attachment && (
         <div className={styles.imageManager}>
-          <img src={attachment} className={styles.image} />
+          <img src={attachment} className={styles.image} alt="Attached."/>
         </div>
       )}
       {attachment === "" ? (

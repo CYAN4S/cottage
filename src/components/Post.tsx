@@ -1,7 +1,6 @@
 import { doc, deleteDoc, updateDoc } from "firebase/firestore";
 import { deleteObject, ref } from "firebase/storage";
 import { firestore, storage } from "../firebaseApp";
-import React from "react";
 import { useState } from "react";
 import styles from "../styles/Post.module.scss";
 import editorStyles from "../styles/Editor.module.scss";
@@ -27,7 +26,7 @@ export default function Post({ postDoc, isOwner }: any) {
       <p className={styles.content}>{postDoc.content}</p>
       {postDoc.attachmentUrl && (
         <div className={styles.imageContainer}>
-          <img src={postDoc.attachmentUrl} className={styles.image} />
+          <img src={postDoc.attachmentUrl} className={styles.image} alt="Uploaded."/>
         </div>
       )}
 

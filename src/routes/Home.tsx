@@ -7,13 +7,13 @@ import Timeline from "../components/Timeline";
 
 import styles from "../styles/Home.module.scss"
 
-type PostData = {
-  id: string,
-  createdAt: number,
-  attachmentUrl: string | null
-  creatorId: string,
-  content: string
-}
+// type PostData = {
+//   id: string,
+//   createdAt: number,
+//   attachmentUrl: string | null
+//   creatorId: string,
+//   content: string
+// }
 
 export default function Home() {
   const [posts, setPosts] = useState<any[]>([]);
