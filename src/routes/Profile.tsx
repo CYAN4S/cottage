@@ -58,9 +58,11 @@ export default function Profile() {
   }, []);
 
   return (
-    <>
+    <div>
+      <h2>닉네임 설정</h2>
       <form onSubmit={onSubmit}>
         <input
+          id="displayname"
           type="text"
           placeholder="Display name"
           value={newDisplayName ? newDisplayName : ""}
@@ -68,8 +70,9 @@ export default function Profile() {
         />
         <input type="submit" value="프로필 갱신" />
       </form>
+      <h2>로그아웃</h2>
       <button onClick={onSignOutClick}>Sign Out</button>
       <Timeline posts={posts} />
-    </>
+    </div>
   );
 }

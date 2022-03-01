@@ -6,12 +6,14 @@ import useProfile from "../Store";
 import styles from "../styles/Router.module.scss";
 
 export default function Navigation() {
-  const { displayName } = useContext(FirebaseContext)!;
+  const context = useContext(FirebaseContext);
 
   return (
     <nav className={styles.nav}>
-      <Link to="/">Home</Link>
-      <Link to="/profile">{displayName}의 프로필</Link>
+      <Link to="/" className={styles.cottage}>
+        cottage
+      </Link>
+      {context && <Link to="/profile">{context.displayName}의 프로필</Link>}
     </nav>
   );
 }

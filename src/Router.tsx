@@ -19,10 +19,10 @@ const AppRouter = () => {
   return (
     <>
       <Router>
+        
         <div className={styles.wrapper}>
           <header className={styles.header}>
-            <div>cottage</div>
-            {context && <Navigation />}
+            <Navigation />
           </header>
           <main className={styles.main}>
             <Routes>
@@ -34,7 +34,7 @@ const AppRouter = () => {
               <Route path="*" element={<Navigate replace to="/" />} />
             </Routes>
           </main>
-          <footer>Copyright 2022 CYAN4S. All rights reserved.</footer>
+          <footer></footer>
         </div>
       </Router>
     </>

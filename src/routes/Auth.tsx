@@ -7,6 +7,7 @@ import {
   signInWithPopup,
 } from "firebase/auth";
 import { auth } from "../firebaseApp";
+import styles from "../styles/Auth.module.scss";
 
 const Auth = () => {
   const [email, setEmail] = useState("");
@@ -43,7 +44,6 @@ const Auth = () => {
     <div>
       <h1>{isSignIn ? "코티지에 로그인" : "코티지에 가입"}</h1>
       <form>
-        <label htmlFor="email">이메일</label>
         <input
           id="email"
           name="email"
@@ -52,7 +52,6 @@ const Auth = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <label htmlFor="password">비밀번호</label>
         <input
           id="password"
           name="password"
@@ -61,8 +60,7 @@ const Auth = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button onClick={onSignClick}>Sign In</button>
-        <button onClick={onSignClick}>Sign Up</button>
+        <button onClick={onSignClick}>{isSignIn ? "로그인" : "가입"}</button>
         <p>또는</p>
         <button onClick={onSocialClick("google")}>Google 계정으로 로그인</button>
         <button onClick={onSocialClick("google")}>GitHub 계정으로 로그인</button>
@@ -70,7 +68,7 @@ const Auth = () => {
 
       <p>
         {isSignIn ? "계정이 없으신가요? " : "이미 회원이신가요? "}
-        <a onClick={() => setIsSignIn((p) => !p)}>
+        <a onClick={() => setIsSignIn((p) => !p)} className={styles.link}>
           {isSignIn ? "가입하기" : "로그인하기"}
         </a>
       </p>

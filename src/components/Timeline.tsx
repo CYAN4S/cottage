@@ -4,10 +4,11 @@ import Post from "./Post";
 
 export default function Timeline({ posts }: { posts: any[] }) {
   const context = useContext(FirebaseContext);
+
   return (
     <div>
       {posts.map((c) => (
-        <Post key={c.id} postDoc={c} isOwner={c.creatorId === context?.uid} />
+        <Post key={c.id} postDoc={c} isOwner={c.creatorId == context?.uid} />
       ))}
     </div>
   );

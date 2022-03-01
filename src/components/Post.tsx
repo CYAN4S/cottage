@@ -4,6 +4,10 @@ import { firestore, storage } from "../firebaseApp";
 import React from "react";
 import { useState } from "react";
 import styles from "../styles/Post.module.scss";
+import editorStyles from "../styles/Editor.module.scss";
+
+import { ReactComponent as DeleteIcon } from "../svg/delete.svg";
+import { ReactComponent as EditIcon } from "../svg/edit.svg";
 
 export default function Post({ postDoc, isOwner }: any) {
   const [editing, setEditing] = useState(false);
@@ -26,29 +30,32 @@ export default function Post({ postDoc, isOwner }: any) {
           <img src={postDoc.attachmentUrl} className={styles.image} />
         </div>
       )}
-      <p className={styles.date}>{new Date(postDoc.createdAt).toLocaleString('ko-KR', { timeZone: 'UTC' })}</p>
 
-      <div className={styles.postProfile}>
-        
+      <div className={styles.postmeta}>
+        <p className={styles.date}>
+          {new Date(postDoc.createdAt).toLocaleString("ko-KR", {
+            timeZone: "UTC",
+          })}
+        </p>
+        {isOwner && (
+          <div className={styles.smallicons}>
+            <button onClick={onDeleteClick}>
+              <DeleteIcon />
+            </button>
+            <button onClick={() => setEditing((p) => !p)}>
+              <EditIcon />
+            </button>
+          </div>
+        )}
       </div>
 
       {isOwner && (
         <>
-          <button onClick={onDeleteClick}>Delete</button>
-          <button onClick={() => setEditing((p) => !p)}>Edit</button>
-
           {editing ? (
             <>
-              <form
-                onSubmit={async (e) => {
-                  e.preventDefault();
-                  await updateDoc(doc(firestore, "posts", postDoc.id), {
-                    content: newContent,
-                  });
-                  setEditing(false);
-                }}
-              >
+              <form className={editorStyles.editor}>
                 <input
+                  className={editorStyles.input}
                   type="text"
                   placeholder="수정된 내용을 넣어주세요."
                   value={newContent}
@@ -56,15 +63,26 @@ export default function Post({ postDoc, isOwner }: any) {
                     setNewContent(e.target.value);
                   }}
                 />
-                <input type="submit" value="수정" />
+                <button
+                  className={editorStyles.cancel}
+                  onClick={() => {
+                    setEditing((prev) => !prev);
+                  }}
+                >
+                  취소
+                </button>
+                <button
+                  className={editorStyles.upload}
+                  onClick={async () => {
+                    await updateDoc(doc(firestore, "posts", postDoc.id), {
+                      content: newContent,
+                    });
+                    setEditing(false);
+                  }}
+                >
+                  수정
+                </button>
               </form>
-              <button
-                onClick={() => {
-                  setEditing((prev) => !prev);
-                }}
-              >
-                취소
-              </button>
             </>
           ) : (
             <></>
