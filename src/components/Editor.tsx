@@ -14,11 +14,13 @@ export default function Editor() {
   const [content, setContent] = useState("");
   const [attachment, setAttachment] = useState("");
 
-  const imageInputRef = useRef<any>(null);
-
+  const imageInputRef = useRef<HTMLInputElement>(null);
   const context = useContext(FirebaseContext);
 
-  const onSubmit = async () => {
+  const onSubmit = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.preventDefault();
     let attachmentUrl: string = "";
 
     if (!attachment && !content) {
@@ -44,12 +46,27 @@ export default function Editor() {
   };
 
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
     const file = e.target.files?.[0];
     if (!file) return;
 
     const reader = new FileReader();
     reader.onloadend = (e: any) => setAttachment(e.currentTarget?.result);
     reader.readAsDataURL(file);
+  };
+
+  const onImagePressed = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.preventDefault();
+    imageInputRef.current?.click();
+  };
+
+  const onImageDelete = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.preventDefault();
+    setAttachment("");
   };
 
   return (
@@ -71,18 +88,15 @@ export default function Editor() {
       />
       {attachment && (
         <div className={styles.imageManager}>
-          <img src={attachment} className={styles.image} alt="Attached."/>
+          <img src={attachment} className={styles.image} alt="Attached." />
         </div>
       )}
       {attachment === "" ? (
-        <button
-          className={styles.imageUpload}
-          onClick={() => imageInputRef.current.click()}
-        >
+        <button className={styles.imageUpload} onClick={onImagePressed}>
           <ImageIcon />
         </button>
       ) : (
-        <button onClick={() => setAttachment("")}>사진 삭제</button>
+        <button onClick={onImageDelete}>사진 삭제</button>
       )}
 
       <button className={styles.upload} onClick={onSubmit}>

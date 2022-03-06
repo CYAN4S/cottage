@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import {
-  HashRouter as Router,
+  BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
@@ -18,7 +18,6 @@ const AppRouter = () => {
   return (
     <>
       <Router>
-        
         <div className={styles.wrapper}>
           <header className={styles.header}>
             <Navigation />
